@@ -34,13 +34,13 @@ endif()
 
 # to configure the options specify them in in the command line or change them in the cmake UI.
 # Don't edit the makefile!
-option(BUILD_SHARED_LIBS "Build shared library" OFF)
+option(BUILD_SHARED_LIBS "Build shared library" ON)
 option(CAPSTONE_BUILD_STATIC "Build static library" ON)
 option(CAPSTONE_BUILD_STATIC_RUNTIME "Embed static runtime" ${BUILD_SHARED_LIBS})
 option(CAPSTONE_BUILD_DIET "Build diet library" OFF)
 option(CAPSTONE_BUILD_TESTS "Build tests" ${PROJECT_IS_TOP_LEVEL})
 option(CAPSTONE_BUILD_CSTOOL "Build cstool" ${PROJECT_IS_TOP_LEVEL})
-option(CAPSTONE_BUILD_CSTEST "Build cstest" OFF)
+option(CAPSTONE_BUILD_CSTEST "Build cstest" ON)
 option(CAPSTONE_USE_DEFAULT_ALLOC "Use default memory allocation functions" ON)
 option(CAPSTONE_ARCHITECTURE_DEFAULT "Whether architectures are enabled by default" ON)
 option(CAPSTONE_DEBUG "Whether to enable extra debug assertions" OFF)
@@ -634,8 +634,6 @@ if(CAPSTONE_BUILD_STATIC)
     add_library(capstone-static STATIC ${ALL_SOURCES} ${ALL_HEADERS})
     set_property(TARGET capstone-static PROPERTY OUTPUT_NAME capstone)
     set(default-target capstone-static)
-    add_library(capstone::capstone ALIAS capstone)
-
 endif ()
 
 
