@@ -35,6 +35,7 @@ endif()
 # to configure the options specify them in in the command line or change them in the cmake UI.
 # Don't edit the makefile!
 option(BUILD_SHARED_LIBS "Build shared library" OFF)
+option(CAPSTONE_BUILD_STATIC "Build static library" ON)
 option(CAPSTONE_BUILD_STATIC_RUNTIME "Embed static runtime" ${BUILD_SHARED_LIBS})
 option(CAPSTONE_BUILD_DIET "Build diet library" OFF)
 option(CAPSTONE_BUILD_TESTS "Build tests" ${PROJECT_IS_TOP_LEVEL})
@@ -628,6 +629,16 @@ if(BUILD_SHARED_LIBS)
     )
 endif()
 
+include_directories("${PROJECT_SOURCE_DIR}/include")
+if(CAPSTONE_BUILD_STATIC)
+    add_library(capstone-static STATIC ${ALL_SOURCES} ${ALL_HEADERS})
+    set_property(TARGET capstone-static PROPERTY OUTPUT_NAME capstone)
+    set(default-target capstone-static)
+    add_library(capstone::capstone ALIAS capstone)
+
+endif ()
+
+
 if(CAPSTONE_BUILD_TESTS)
     set(CMAKE_FOLDER "Tests")
     enable_testing()
@@ -746,6 +757,13 @@ if(CAPSTONE_INSTALL)
         )
     endif()
 endif()
+
+if (CAPSTONE_BUILD_STATIC AND CAPSTONE_INSTALL)
+    install(TARGETS capstone-static
+            RUNTIME DESTINATION bin
+            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+            ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+endif ()
 
 if(CAPSTONE_BUILD_CSTOOL)
     file(GLOB CSTOOL_SRC cstool/*.c)
