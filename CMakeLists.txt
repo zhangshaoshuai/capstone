@@ -40,7 +40,7 @@ option(CAPSTONE_BUILD_STATIC_RUNTIME "Embed static runtime" ${BUILD_SHARED_LIBS}
 option(CAPSTONE_BUILD_DIET "Build diet library" OFF)
 option(CAPSTONE_BUILD_TESTS "Build tests" ${PROJECT_IS_TOP_LEVEL})
 option(CAPSTONE_BUILD_CSTOOL "Build cstool" ${PROJECT_IS_TOP_LEVEL})
-option(CAPSTONE_BUILD_CSTEST "Build cstest" ON)
+option(CAPSTONE_BUILD_CSTEST "Build cstest" OFF)
 option(CAPSTONE_USE_DEFAULT_ALLOC "Use default memory allocation functions" ON)
 option(CAPSTONE_ARCHITECTURE_DEFAULT "Whether architectures are enabled by default" ON)
 option(CAPSTONE_DEBUG "Whether to enable extra debug assertions" OFF)
@@ -622,6 +622,7 @@ target_include_directories(capstone PUBLIC
 set_property(TARGET capstone PROPERTY C_STANDARD 99)
 
 if(BUILD_SHARED_LIBS)
+    message("enabled BUILD_SHARED_LIBS")
     target_compile_definitions(capstone PUBLIC CAPSTONE_SHARED)
     set_target_properties(capstone PROPERTIES
         VERSION ${PROJECT_VERSION}
@@ -631,6 +632,7 @@ endif()
 
 include_directories("${PROJECT_SOURCE_DIR}/include")
 if(CAPSTONE_BUILD_STATIC)
+    message("enabled CAPSTONE_BUILD_STATIC")
     add_library(capstone-static STATIC ${ALL_SOURCES} ${ALL_HEADERS})
     set_property(TARGET capstone-static PROPERTY OUTPUT_NAME capstone)
     set(default-target capstone-static)
@@ -774,6 +776,7 @@ if(CAPSTONE_BUILD_CSTOOL)
 endif()
 
 if(CAPSTONE_BUILD_CSTEST)
+    message("enabled CAPSTONE_BUILD_CSTEST")
     find_package(PkgConfig REQUIRED)
     pkg_check_modules(CMOCKA REQUIRED IMPORTED_TARGET cmocka)
 
